@@ -1,9 +1,9 @@
-export const join = (req, rep) => rep.send("This is join!");
-export const login = (req, rep) => rep.send("This is login!");
-export const logout = (req, rep) => rep.send("This is logout!");
+export const join = (req, rep) => rep.render("join");
+export const login = (req, rep) => rep.render("login");
+export const logout = (req, rep) => rep.render("logout");
 export const users = (req, rep) => {
-  return rep.send("This is users!");
+  return rep.render("users");
 };
-export const userDetail = (req, rep) => rep.send("This is userDetail!");
-export const editProfile = (req, rep) => rep.send("This is editProfile!");
-export const changePassword = (req, rep) => rep.send("This is changePassword!");
+export const userDetail = (req, rep) => rep.render("userDetail");
+export const editProfile = (req, rep) => rep.render("editProfile");
+export const changePassword = (req, rep) => rep.render("changePassword");
