@@ -1,6 +1,10 @@
 export const home = (req, rep) => rep.render("home", { pageTitle: "HOME" });
-export const search = (req, rep) =>
-  rep.render("search", { pageTitle: "SEARCH" });
+export const search = (req, rep) => {
+  const {
+    query: { term: searchingBy },
+  } = req;
+  rep.render("search", { pageTitle: "SEARCH", searchingBy });
+};
 export const videos = (req, rep) =>
   rep.render("videos", { pageTitle: "VIDEOS" });
 export const upload = (req, rep) =>
