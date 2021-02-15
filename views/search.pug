@@ -1,5 +1,13 @@
 extends layouts/main.pug
+include mixins/videoBlock.pug
 
 block content 
     .search__column
         h3 Searching For #{searchingBy}
+    .search__videos
+        each item in videos
+            +videoBlock({
+                title:item.title,
+                views:item.views,
+                videoFile:item.videoFile,
+            }) 
