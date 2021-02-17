@@ -99,6 +99,7 @@ dist
 
 # FuseBox cache
 .fusebox/
+uploads
 
 # DynamoDB Local files
 .dynamodb/

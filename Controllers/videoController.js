@@ -39,13 +39,21 @@ export const postUpload = async (req, rep) => {
     title,
     description,
   });
-  console.log(newVideo);
   //To do : Upload and Save video
   rep.redirect(routes.videoDetail(newVideo.id));
 };
 
-export const videoDetail = (req, rep) =>
-  rep.render("videoDetail", { pageTitle: "DETAIL VIDEO" });
+export const videoDetail = async (req, rep) => {
+  const {
+    params: { id },
+  } = req;
+  try {
+    const video = await Video.findById(id);
+    rep.render("videoDetail", { pageTitle: "DETAIL VIDEO", video });
+  } catch (error) {
+    rep.redirect(routes.home);
+  }
+};
 export const editVideo = (req, rep) =>
   rep.render("editVideo", { pageTitle: "EDIT VIDEO" });
 export const deleteVideo = (req, rep) =>
