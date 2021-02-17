@@ -4,7 +4,8 @@ block content
     .video__player
         video(src=`/${video.fileurl}`)
     .video__info
-        a(href=routes.editVideo) Edit Video
+        //- video.id : videocontroller.js 의 videodetail 의 render함수 두 번째 인자에서 통째로 받아온 video를 의미함
+        a(href=routes.editVideo(video.id)) Edit Video
         h5.video__title=video.title
         span.video__views=video.views
         p.video__description=video.description
