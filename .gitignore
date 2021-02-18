@@ -99,7 +99,7 @@ dist
 
 # FuseBox cache
 .fusebox/
-uploads
+
 
 # DynamoDB Local files
 .dynamodb/
@@ -117,3 +117,5 @@ uploads
 .yarn/install-state.gz
 .pnp.*
 package-lock.json
+uploads
+static
