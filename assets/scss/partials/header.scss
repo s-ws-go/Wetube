@@ -38,8 +38,10 @@
         input {
           padding: 10px;
           width: 100%;
+          max-width: none;
           border-radius: 5px;
           font-weight: 600;
+          max-width: none;
           &::placeholder {
             font-weight: 400;
             color: rgba(0, 0, 0, 0.5);
@@ -48,10 +50,4 @@
       }
     }
   }
-
-  //   .header-column {
-  //   }
-  //   .fab.fa-youtube {
-  //     color: white;
-  //   }
 }

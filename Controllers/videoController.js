@@ -10,7 +10,7 @@ import Video from "../models/Video";
 
 export const home = async (req, rep) => {
   try {
-    const videos = await Video.find({});
+    const videos = await Video.find({}).sort({ _id: -1 });
     rep.render("home", { pageTitle: "HOME", videos });
   } catch (error) {
     console.log(error);
@@ -18,10 +18,17 @@ export const home = async (req, rep) => {
   }
 };
 
-export const search = (req, rep) => {
+export const search = async (req, rep) => {
   const {
     query: { term: searchingBy },
   } = req;
+  let videos = [];
+  try {
+    videos = await Video.find({ title: { $regex: searchingBy, options: "i" } });
+  } catch (error) {
+    console.log(error);
+  }
+
   rep.render("search", { pageTitle: "SEARCH", searchingBy, videos });
 };
 // export const videos = (req, rep) =>
