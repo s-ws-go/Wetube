@@ -12,6 +12,7 @@ import routes from "../routes";
 const globalRouter = express.Router();
 globalRouter.get(routes.join, getJoin);
 globalRouter.post(routes.join, postJoin);
+//user의 password가 맞나 틀리나 확인하는 middleware가 추가됨
 
 globalRouter.get(routes.login, getLogin);
 globalRouter.post(routes.login, postLogin);
