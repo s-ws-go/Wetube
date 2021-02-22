@@ -1,3 +1,4 @@
+import passport from "passport";
 import routes from "../routes";
 import User from "../models/User";
 
@@ -29,9 +30,10 @@ export const postJoin = async (req, rep, next) => {
 
 export const getLogin = (req, rep) =>
   rep.render("login", { pageTitle: "LOGIN" });
-export const postLogin = (req, rep) => {
-  rep.redirect(routes.home);
-};
+export const postLogin = passport.authenticate("local", {
+  failureRedirect: routes.login,
+  successRedirect: routes.home,
+});
 
 export const logout = (req, rep) => {
   //To do : Process Log Out
