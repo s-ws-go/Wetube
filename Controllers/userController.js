@@ -18,18 +18,20 @@ export const postJoin = async (req, rep, next) => {
         name,
         email,
       });
+
       await User.register(user, password);
       next();
       //To Do : Log User in
     } catch (error) {
       console.log(error);
+      rep.redirect(routes.home);
     }
-    rep.redirect(routes.home);
   }
 };
 
 export const getLogin = (req, rep) =>
   rep.render("login", { pageTitle: "LOGIN" });
+
 export const postLogin = passport.authenticate("local", {
   failureRedirect: routes.login,
   successRedirect: routes.home,
