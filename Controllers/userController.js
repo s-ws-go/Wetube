@@ -38,12 +38,37 @@ export const postLogin = passport.authenticate("local", {
 
 export const githubLogin = passport.authenticate("github");
 
-export const githubLoginCallback = (accessToken, refreshToken, profile, cb) => {
-  console.log(accessToken, refreshToken, profile, cb);
+export const githubLoginCallback = async (
+  accessToken,
+  refreshToken,
+  profile,
+  cb
+) => {
+  const {
+    _json: { id, avatar_url: avartarUrl, name, email },
+  } = profile;
+  try {
+    const user = await User.findOne({ email });
+    // console.log(user);
+    if (user) {
+      user.githubId = id;
+      user.save();
+      return cb(null, user);
+    }
+    const newUser = await User.create({
+      email,
+      name,
+      githubId: id,
+      avartarUrl,
+    });
+    return cb(null, newUser);
+  } catch (error) {
+    return cb(error);
+  }
 };
 // 로그인이 끝난 이후 과정
 export const postGithubLogin = (req, res) => {
-  res.send(routes.home);
+  res.redirect(routes.home);
 };
 
 export const logout = (req, rep) => {
@@ -51,9 +76,10 @@ export const logout = (req, rep) => {
   rep.redirect(routes.home);
 };
 
-export const users = (req, rep) => {
-  return rep.render("users");
-};
+// export const users = (req, rep) => {
+//   return rep.render("users");
+// };
+
 export const userDetail = (req, rep) =>
   rep.render("userDetail", { pageTitle: "DETAIL USER" });
 export const editProfile = (req, rep) =>
