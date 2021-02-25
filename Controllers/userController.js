@@ -71,6 +71,41 @@ export const postGithubLogin = (req, res) => {
   res.redirect(routes.home);
 };
 
+export const facebookLogin = passport.authenticate("facebook");
+
+export const facebookLoginCallback = async (
+  accessToken,
+  refreshToken,
+  profile,
+  cb
+) => {
+  const {
+    _json: { id, name },
+    profileUrl,
+  } = profile;
+  try {
+    const user = await User.findOne({ id });
+    // console.log(user);
+    if (user) {
+      user.facebookId = id;
+      user.save();
+      return cb(null, user);
+    }
+    const newUser = await User.create({
+      name,
+      facebookId: id,
+      profileUrl,
+    });
+    return cb(null, newUser);
+  } catch (error) {
+    return cb(error);
+  }
+};
+
+export const postFacebookLogin = (req, res) => {
+  res.redirect(routes.home);
+};
+
 export const logout = (req, rep) => {
   req.logout();
   rep.redirect(routes.home);
@@ -80,8 +115,22 @@ export const logout = (req, rep) => {
 //   return rep.render("users");
 // };
 
-export const userDetail = (req, rep) =>
-  rep.render("userDetail", { pageTitle: "DETAIL USER" });
+export const getMe = (req, res) => {
+  res.render("userDetail", { pageTitle: "DETAIL USER", user: req.user });
+};
+
+export const userDetail = async (req, rep) => {
+  const {
+    params: { id },
+  } = req;
+  try {
+    //id로 사용자를 찾아  userdetail을 rendering 해 줌.
+    const user = await User.findById(id);
+    rep.render("userDetail", { pageTitle: "DETAIL USER", user });
+  } catch (error) {
+    rep.redirect(routes.home);
+  }
+};
 export const editProfile = (req, rep) =>
   rep.render("editProfile", { pageTitle: "EDIT PROFILE" });
 export const changePassword = (req, rep) =>

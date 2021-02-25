@@ -3,13 +3,16 @@ import passport from "passport";
 import routes from "../routes";
 import { home, search } from "../Controllers/videoController";
 import {
-  getJoin, //Postjoin 입력시 에러나는 이유는??
+  getJoin,
   postJoin,
   getLogin,
   postLogin,
   logout,
   githubLogin,
   postGithubLogin,
+  getMe,
+  facebookLogin,
+  postFacebookLogin,
 } from "../Controllers/userController";
 import { onlyPrivate, onlyPublic } from "../middlewares";
 
@@ -26,11 +29,22 @@ globalRouter.get(routes.search, search);
 //user relation
 globalRouter.get(routes.logout, onlyPrivate, logout);
 
+//Github router
 globalRouter.get(routes.github, githubLogin);
 globalRouter.get(
   routes.githubCallback,
   passport.authenticate("github", { failureRedirect: "/login" }),
   postGithubLogin
 );
+
+//Facebook router
+globalRouter.get(routes.facebook, facebookLogin);
+globalRouter.get(
+  routes.facebookCallback,
+  passport.authenticate("facebook", { failureRedirect: "/login" }),
+  postFacebookLogin
+);
+
+globalRouter.get(routes.me, getMe);
 
 export default globalRouter;
