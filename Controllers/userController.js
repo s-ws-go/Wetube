@@ -1,6 +1,7 @@
 import passport from "passport";
 import routes from "../routes";
 import User from "../models/User";
+import { RSA_NO_PADDING } from "constants";
 
 export const getJoin = (req, rep) => {
   rep.render("join", { pageTitle: "JOIN" });
@@ -82,18 +83,22 @@ export const kakaoLoginCallback = async (
 ) => {
   console.log(profile);
   const {
-    _json: { id },
-  } = profile;
-  const {
     _json: {
-      properties: { nickname, profile_image: avartarUrl },
-    },
-  } = profile;
-  const {
-    _json: {
+      id,
+      properties: { nickname: name, profile_image: avatarUrl },
       kakao_account: { email },
     },
   } = profile;
+  // const {
+  //   _json: {
+  //     properties: { nickname, profile_image: avatarUrl },
+  //   },
+  // } = profile;
+  // const {
+  //   _json: {
+  //     kakao_account: { email },
+  //   },
+  // } = profile;
   try {
     const user = await User.findOne({ email });
     // console.log(user);
@@ -104,9 +109,9 @@ export const kakaoLoginCallback = async (
     }
     const newUser = await User.create({
       email,
-      nickname,
+      name,
       kakaoId: id,
-      avartarUrl,
+      avatarUrl,
     });
     return cb(null, newUser);
   } catch (error) {
@@ -143,7 +148,27 @@ export const userDetail = async (req, rep) => {
     rep.redirect(routes.home);
   }
 };
-export const editProfile = (req, rep) =>
+//get Edit profile은 로그인한 메일과 패스워드를 가지고 있어야 함
+export const getEditProfile = (req, rep) =>
   rep.render("editProfile", { pageTitle: "EDIT PROFILE" });
+
+export const postEditProfile = async (req, rep) => {
+  const {
+    body: { name, email },
+    file,
+  } = req;
+  try {
+    await User.findByIdAndUpdate(req.user.id, {
+      name,
+      email,
+      avatarUrl: file ? file.path : req.user.avatarUrl,
+      //req 안에는 user 객체가 있음. 만약에 file이 없다면 user의 기존 이미지(avatarUrl) 그대로 사용
+    });
+    rep.redirect(routes.me);
+  } catch (error) {
+    rep.render("editProflie", { pageTitle: "EDIT PROFILE" });
+  }
+};
+
 export const changePassword = (req, rep) =>
   rep.render("changePassword", { pageTitle: "CHANGE PASSWORD" });

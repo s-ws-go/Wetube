@@ -1,5 +1,4 @@
 import express from "express";
-import "core-js";
 import morgan from "morgan";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
@@ -15,7 +14,6 @@ import videoRouter from "./Routers/videoRouter";
 import globalRouter from "./Routers/globalRouter";
 
 import "./passport";
-import { Mongoose } from "mongoose";
 
 const app = express();
 
