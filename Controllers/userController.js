@@ -1,7 +1,6 @@
 import passport from "passport";
 import routes from "../routes";
 import User from "../models/User";
-import { RSA_NO_PADDING } from "constants";
 
 export const getJoin = (req, rep) => {
   rep.render("join", { pageTitle: "JOIN" });
@@ -166,9 +165,25 @@ export const postEditProfile = async (req, rep) => {
     });
     rep.redirect(routes.me);
   } catch (error) {
-    rep.render("editProflie", { pageTitle: "EDIT PROFILE" });
+    rep.redirect(routes.editProfile);
   }
 };
 
-export const changePassword = (req, rep) =>
+export const getChangePassword = (req, rep) =>
   rep.render("changePassword", { pageTitle: "CHANGE PASSWORD" });
+
+export const postChangePassword = async (req, rep) => {
+  const { body: oldPassword, newPassword, newPassword1 } = req;
+  try {
+    if (newPassword !== newPassword1) {
+      rep.status(400);
+      rep.redirect(`/users${routes.changePassword}`);
+      return;
+    }
+    await req.user.changePassword(oldPassword, newPassword);
+    rep.redirect(routes.me);
+  } catch (error) {
+    rep.status(400);
+    rep.redirect(`/users${routes.changePassword}`);
+  }
+};
