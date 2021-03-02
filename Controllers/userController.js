@@ -44,8 +44,9 @@ export const githubLoginCallback = async (
   profile,
   cb
 ) => {
+  console.log(profile);
   const {
-    _json: { id, avatar_url: avartarUrl, name, email },
+    _json: { id, avatar_url: avatarUrl, name, email },
   } = profile;
   try {
     const user = await User.findOne({ email });
@@ -59,7 +60,7 @@ export const githubLoginCallback = async (
       email,
       name,
       githubId: id,
-      avartarUrl,
+      avatarUrl,
     });
     return cb(null, newUser);
   } catch (error) {
@@ -71,30 +72,41 @@ export const postGithubLogin = (req, res) => {
   res.redirect(routes.home);
 };
 
-export const facebookLogin = passport.authenticate("facebook");
+export const kakaoLogin = passport.authenticate("kakao");
 
-export const facebookLoginCallback = async (
+export const kakaoLoginCallback = async (
   accessToken,
   refreshToken,
   profile,
   cb
 ) => {
+  console.log(profile);
   const {
-    _json: { id, name },
-    profileUrl,
+    _json: { id },
+  } = profile;
+  const {
+    _json: {
+      properties: { nickname, profile_image: avartarUrl },
+    },
+  } = profile;
+  const {
+    _json: {
+      kakao_account: { email },
+    },
   } = profile;
   try {
-    const user = await User.findOne({ id });
+    const user = await User.findOne({ email });
     // console.log(user);
     if (user) {
-      user.facebookId = id;
+      user.kakaoId = id;
       user.save();
       return cb(null, user);
     }
     const newUser = await User.create({
-      name,
-      facebookId: id,
-      profileUrl,
+      email,
+      nickname,
+      kakaoId: id,
+      avartarUrl,
     });
     return cb(null, newUser);
   } catch (error) {
@@ -102,7 +114,7 @@ export const facebookLoginCallback = async (
   }
 };
 
-export const postFacebookLogin = (req, res) => {
+export const postKakaoLogin = (req, res) => {
   res.redirect(routes.home);
 };
 

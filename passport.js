@@ -1,10 +1,10 @@
 import passport from "passport";
 import GitHubStrategy from "passport-github";
-import FacebookStrategy from "passport-facebook";
+import KakaoStrategy from "passport-kakao";
 import User from "./models/User";
 import {
-  facebookLoginCallback,
   githubLoginCallback,
+  kakaoLoginCallback,
 } from "./Controllers/userController";
 import routes from "./routes";
 
@@ -23,13 +23,13 @@ passport.use(
 );
 
 passport.use(
-  new FacebookStrategy(
+  new KakaoStrategy(
     {
-      clientID: process.env.FB_ID,
-      clientSecret: process.env.FB_SECRET,
-      callbackURL: `http://localhost:4000${routes.facebookCallback}`,
+      clientID: process.env.KK_ID,
+      // clientSecret: process.env.FB_SECRET,
+      callbackURL: `http://localhost:4000${routes.kakaoCallback}`,
     },
-    facebookLoginCallback
+    kakaoLoginCallback
   )
 );
 
