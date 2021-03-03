@@ -141,7 +141,8 @@ export const userDetail = async (req, rep) => {
   } = req;
   try {
     //id로 사용자를 찾아  userdetail을 rendering 해 줌.
-    const user = await User.findById(id);
+    const user = await User.findById(id).populate("videos");
+    console.log(user);
     rep.render("userDetail", { pageTitle: "DETAIL USER", user });
   } catch (error) {
     rep.redirect(routes.home);

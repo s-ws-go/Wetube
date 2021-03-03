@@ -6,7 +6,6 @@ import {
   getUpload,
   postUpload,
   videoDetail,
-  videos,
 } from "../Controllers/videoController";
 import { onlyPrivate, uploadVideo } from "../middlewares";
 import routes from "../routes";
