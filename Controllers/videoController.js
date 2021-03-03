@@ -24,11 +24,12 @@ export const search = async (req, rep) => {
   } = req;
   let videos = [];
   try {
-    videos = await Video.find({ title: { $regex: searchingBy, options: "i" } });
+    videos = await Video.find({
+      title: { $regex: searchingBy, $options: "i" },
+    });
   } catch (error) {
     console.log(error);
   }
-
   rep.render("search", { pageTitle: "SEARCH", searchingBy, videos });
 };
 // export const videos = (req, rep) =>
@@ -42,7 +43,7 @@ export const postUpload = async (req, rep) => {
     file: { path },
   } = req;
   const newVideo = await Video.create({
-    fileurl: path,
+    fileUrl: path,
     title,
     description,
     creator: req.user.id,
